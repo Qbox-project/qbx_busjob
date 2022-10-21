@@ -1,25 +1,21 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-BusJob'
 version '1.0.0'
+repository 'https://github.com/Qbox-project/qb-busjob'
 
 shared_scripts {
+    'config.lua',
     '@qb-core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
-    'config.lua'
+    '@ox_lib/init.lua'
 }
 
-client_scripts {
-    '@PolyZone/client.lua',
-    '@PolyZone/BoxZone.lua',
-    '@PolyZone/EntityZone.lua',
-    '@PolyZone/CircleZone.lua',
-    '@PolyZone/ComboZone.lua',
-    'client/main.lua'
-}
+client_script 'client/main.lua'
 
 server_script 'server/main.lua'
+
+dependency 'ox_lib'
 
 lua54 'yes'
