@@ -1,7 +1,7 @@
 Config = Config or {}
 
 Config.AllowedVehicles = {
-    [1] = {model = "bus", label = Lang:t('info.bus')},
+    [1] = {model = `bus`}
 }
 
 Config.Location = vector4(462.22, -641.15, 28.45, 175.0)
@@ -12,7 +12,7 @@ Config.NPCLocations = {
         vector4(-110.31, -1686.29, 29.31, 223.84),
         vector4(-712.83, -824.56, 23.54, 194.7),
         vector4(-692.63, -670.44, 30.86, 61.84),
-        vector4(-250.14, -886.78, 30.63, 8.67),
+        vector4(-250.14, -886.78, 30.63, 8.67)
     }
 }
 
@@ -70,7 +70,7 @@ Config.NpcSkins = {
         'a_f_y_vinewood_03',
         'a_f_y_vinewood_04',
         'a_f_y_yoga_01',
-        'g_f_y_ballas_01',
+        'g_f_y_ballas_01'
     },
     [2] = {
         'ig_barry',
@@ -159,6 +159,6 @@ Config.NpcSkins = {
         'a_m_m_paparazzi_01',
         'a_m_m_polynesian_01',
         'a_m_m_prolhost_01',
-        'a_m_m_rurmeth_01',
+        'a_m_m_rurmeth_01'
     }
 }
