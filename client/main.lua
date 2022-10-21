@@ -97,7 +97,7 @@ local function GetDeliveryLocation()
         coords = vec3(Config.NPCLocations.Locations[route].x,
         Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
         radius = 5,
-        debug = true,
+        debug = false,
         onEnter = function()
             inRange = true
             exports["qb-core"]:DrawText(Lang:t('info.busstop_text'), 'rgb(220, 20, 60)')
@@ -233,7 +233,7 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
                 coords = vec3(Config.NPCLocations.Locations[route].x,
                 Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
                 radius = 5,
-                debug = true,
+                debug = false,
                 onEnter = function()
                     inRange = true
                     exports["qb-core"]:DrawText(Lang:t('info.busstop_text'), 'rgb(220, 20, 60)')
@@ -290,7 +290,7 @@ CreateThread(function()
             name = "busMain",
             coords = vec3(Config.Location.x, Config.Location.y, Config.Location.z),
             radius = 5,
-            debug = true,
+            debug = false,
             onEnter = function()
                 inRange = true
                 CreateThread(function()
