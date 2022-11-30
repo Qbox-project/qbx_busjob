@@ -1,9 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
 
-version '1.0.0'
-repository 'https://github.com/Qbox-project/qb-busjob'
-
 shared_scripts {
     'config.lua',
     '@qb-core/shared/locale.lua',
