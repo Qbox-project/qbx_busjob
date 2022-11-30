@@ -22,6 +22,7 @@ local BusData = {
 }
 local VehicleZone = nil
 local PickupZone = nil
+local DeliverZone = nil
 
 -- Functions
 local function resetNpcTask()
