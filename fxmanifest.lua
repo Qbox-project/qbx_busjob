@@ -16,6 +16,10 @@ client_script 'client/main.lua'
 
 server_script 'server/main.lua'
 
-dependency 'ox_lib'
+dependencies {
+    'qb-core',
+    'ox_lib'
+}
 
 lua54 'yes'
+use_experimental_fxv2_oal 'yes'
