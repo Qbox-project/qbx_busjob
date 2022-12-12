@@ -6,7 +6,7 @@ function NearBus(src)
     local ped = GetPlayerPed(src)
     local coords = GetEntityCoords(ped)
     for _, v in pairs(Config.NPCLocations.Locations) do
-        local dist = #(coords - vector3(v.x, v.y, v.z))
+        local dist = #(coords - vec3(v.x, v.y, v.z))
         if dist < 20 then
             return true
         end
