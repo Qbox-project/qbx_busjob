@@ -162,11 +162,11 @@ local function busGarage()
         }
     end
     lib.registerContext({
-        id = 'open_busGarage_context_menu',
+        id = 'qb_busjob_open_garage_context_menu',
         title = Lang:t('menu.bus_header'),
         options = vehicleMenu
     })
-    lib.showContext('open_busGarage_context_menu')
+    lib.showContext('qb_busjob_open_garage_context_menu')
 end
 
 local function updateZone()
