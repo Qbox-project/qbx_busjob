@@ -1,20 +1,37 @@
----
-name: Feature Request
-about: Suggest an idea for QBCore
+name: Feature request
+description: Suggest an idea for Qbox
 title: "[SUGGESTION]"
 labels: enhancement
-assignees: ''
-
----
-
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is.
-
-**Describe the feature you'd like**
-A clear and concise description of what you want to happen. and with as much detail as possible how it would function in your opinion. Please try to keep it unique.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered for people to have in mind just in case the main idea isn't liked but a derivative is.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please use our Discord Server to ask questions and receive support: https://discord.gg/qbox
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: A clear and concise description of what the problem is, or what feature you want to be implemented.
+      placeholder: |
+        Some examples:
+        I'm frustrated that ...
+        It would be nice if ...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Ideal solution
+      description: A clear and concise description of what you want to happen, with as much detail as possible.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative solutions
+      description: A clear and concise description of any alternative solutions or features you've considered.
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: If you have any other context about the problem such as screenshots or videos, add them here.
