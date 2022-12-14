@@ -5,6 +5,8 @@ local route = 1
 local max = #Config.NPCLocations.Locations
 local busBlip = nil
 local VehicleZone
+local DeliverZone
+local PickupZone
 
 local NpcData = {
     Active = false,
@@ -139,6 +141,7 @@ local function GetDeliveryLocation()
                         lib.hideTextUI()
                         shownTextUI = false
                         DeliverZone:remove()
+                        DeliverZone = nil
                         break
                     end
                 until not inRange
@@ -343,6 +346,7 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
                                 lib.hideTextUI()
                                 shownTextUI = false
                                 PickupZone:remove()
+                                PickupZone = nil
                                 break
                             end
                         until not inRange
