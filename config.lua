@@ -4,6 +4,8 @@ Config.AllowedVehicles = {
     {model = `bus`}
 }
 
+Config.BonusChance = 36 -- Value from 1 to 100 (percentage)
+
 Config.Location = vec4(462.22, -641.15, 28.45, 175.0)
 
 Config.NPCLocations = {
