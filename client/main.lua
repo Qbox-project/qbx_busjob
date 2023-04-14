@@ -181,13 +181,13 @@ local function updateZone()
 
     local inRange = false
     local shownTextUI = false
-    local inVeh = isPlayerVehicleABus()
     VehicleZone = lib.zones.sphere({
         name = "qb_busjob_bus_main",
         coords = Config.Location.xyz,
         radius = 5,
         debug = Config.Debug,
         onEnter = function()
+            local inVeh = isPlayerVehicleABus()
             inRange = true
             CreateThread(function()
                 repeat
