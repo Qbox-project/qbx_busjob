@@ -10,9 +10,7 @@ local PickupZone
 
 local NpcData = {
     Active = false,
-    CurrentNpc = nil,
     LastNpc = nil,
-    CurrentDeliver = nil,
     LastDeliver = nil,
     Npc = nil,
     NpcBlip = nil,
@@ -30,9 +28,7 @@ local BusData = {
 local function resetNpcTask()
     NpcData = {
         Active = false,
-        CurrentNpc = nil,
         LastNpc = nil,
-        CurrentDeliver = nil,
         LastDeliver = nil,
         Npc = nil,
         NpcBlip = nil,
@@ -49,9 +45,15 @@ local function removeBusBlip()
 end
 
 local function removeNPCBlip()
-    if not NpcData.DeliveryBlip then return end
-    RemoveBlip(NpcData.DeliveryBlip)
-    NpcData.DeliveryBlip = nil
+    if NpcData.DeliveryBlip then
+        RemoveBlip(NpcData.DeliveryBlip)
+        NpcData.DeliveryBlip = nil
+    end
+
+    if NpcData.NpcBlip then
+        RemoveBlip(NpcData.NpcBlip)
+        NpcData.NpcBlip = nil
+    end
 end
 
 local function updateBlip()
@@ -111,10 +113,9 @@ local function GetDeliveryLocation()
     local shownTextUI = false
     DeliverZone = lib.zones.sphere({
         name = "qb_busjob_bus_deliver",
-        coords = vec3(Config.NPCLocations.Locations[route].x,
-        Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
+        coords = vec3(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
         radius = 5,
-        debug = false,
+        debug = Config.Debug,
         onEnter = function()
             inRange = true
             if not shownTextUI then
@@ -185,7 +186,7 @@ local function updateZone()
         name = "qb_busjob_bus_main",
         coords = Config.Location.xyz,
         radius = 5,
-        debug = false,
+        debug = Config.Debug,
         onEnter = function()
             inRange = true
             CreateThread(function()
@@ -259,6 +260,7 @@ AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
 
     updateBlip()
+    updateZone()
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
@@ -286,75 +288,74 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
     end
 
     if not NpcData.Active then
-        QBCore.Functions.Notify(Lang:t('error.already_driving_bus'), 'error')
-        return
-    end
+        local Gender = math.random(1, #Config.NpcSkins)
+        local PedSkin = math.random(1, #Config.NpcSkins[Gender])
+        local model = joaat(Config.NpcSkins[Gender][PedSkin])
+        lib.requestModel(model)
+        NpcData.Npc = CreatePed(3, model, Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z - 0.98, Config.NPCLocations.Locations[route].w, false, true)
+        PlaceObjectOnGroundProperly(NpcData.Npc)
+        FreezeEntityPosition(NpcData.Npc, true)
+        removeNPCBlip()
+        QBCore.Functions.Notify(Lang:t('info.goto_busstop'), 'primary')
+        NpcData.NpcBlip = AddBlipForCoord(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z)
+        SetBlipColour(NpcData.NpcBlip, 3)
+        SetBlipRoute(NpcData.NpcBlip, true)
+        SetBlipRouteColour(NpcData.NpcBlip, 3)
+        NpcData.LastNpc = route
+        NpcData.Active = true
+        local inRange = false
+        local shownTextUI = false
+        PickupZone = lib.zones.sphere({
+            name = "qb_busjob_bus_pickup",
+            coords = vec3(Config.NPCLocations.Locations[route].x,
+            Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
+            radius = 5,
+            debug = Config.Debug,
+            onEnter = function()
+                inRange = true
+                if not shownTextUI then
+                    lib.showTextUI(Lang:t('info.busstop_text'))
+                    shownTextUI = true
+                end
+                CreateThread(function()
+                    repeat
+                        Wait(0)
+                        if IsControlJustPressed(0, 38) then
+                            local maxSeats, freeSeat = GetVehicleModelNumberOfSeats(GetEntityModel(cache.vehicle))
 
-    local Gender = math.random(1, #Config.NpcSkins)
-    local PedSkin = math.random(1, #Config.NpcSkins[Gender])
-    local model = GetHashKey(Config.NpcSkins[Gender][PedSkin])
-    lib.requestModel(model)
-    NpcData.Npc = CreatePed(3, model, Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z - 0.98, Config.NPCLocations.Locations[route].w, false, true)
-    PlaceObjectOnGroundProperly(NpcData.Npc)
-    FreezeEntityPosition(NpcData.Npc, true)
-    removeNPCBlip()
-    QBCore.Functions.Notify(Lang:t('info.goto_busstop'), 'primary')
-    NpcData.NpcBlip = AddBlipForCoord(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z)
-    SetBlipColour(NpcData.NpcBlip, 3)
-    SetBlipRoute(NpcData.NpcBlip, true)
-    SetBlipRouteColour(NpcData.NpcBlip, 3)
-    NpcData.LastNpc = route
-    NpcData.Active = true
-    local inRange = false
-    local shownTextUI = false
-    PickupZone = lib.zones.sphere({
-        name = "qb_busjob_bus_pickup",
-        coords = vec3(Config.NPCLocations.Locations[route].x,
-        Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
-        radius = 5,
-        debug = false,
-        onEnter = function()
-            inRange = true
-            if not shownTextUI then
-                lib.showTextUI(Lang:t('info.busstop_text'))
-                shownTextUI = true
-            end
-            CreateThread(function()
-                repeat
-                    Wait(0)
-                    if IsControlJustPressed(0, 38) then
-                        local maxSeats, freeSeat = GetVehicleModelNumberOfSeats(cache.vehicle)
-
-                        for i = maxSeats - 1, 0, -1 do
-                            if IsVehicleSeatFree(cache.vehicle, i) then
-                                freeSeat = i
-                                break
+                            for i = maxSeats - 1, 0, -1 do
+                                if IsVehicleSeatFree(cache.vehicle, i) then
+                                    freeSeat = i
+                                    break
+                                end
                             end
+
+                            if not freeSeat then return end
+
+                            ClearPedTasksImmediately(NpcData.Npc)
+                            FreezeEntityPosition(NpcData.Npc, false)
+                            TaskEnterVehicle(NpcData.Npc, cache.vehicle, -1, freeSeat, 1.0, 0)
+                            QBCore.Functions.Notify(Lang:t('info.goto_busstop'), 'primary')
+                            removeNPCBlip()
+                            GetDeliveryLocation()
+                            NpcData.NpcTaken = true
+                            TriggerServerEvent('qb-busjob:server:NpcPay')
+                            lib.hideTextUI()
+                            shownTextUI = false
+                            PickupZone:remove()
+                            PickupZone = nil
+                            break
                         end
-
-                        if not freeSeat then return end
-
-                        ClearPedTasksImmediately(NpcData.Npc)
-                        FreezeEntityPosition(NpcData.Npc, false)
-                        TaskEnterVehicle(NpcData.Npc, cache.vehicle, -1, freeSeat, 1.0, 0)
-                        QBCore.Functions.Notify(Lang:t('info.goto_busstop'), 'primary')
-                        removeNPCBlip()
-                        GetDeliveryLocation()
-                        NpcData.NpcTaken = true
-                        TriggerServerEvent('qb-busjob:server:NpcPay')
-                        lib.hideTextUI()
-                        shownTextUI = false
-                        PickupZone:remove()
-                        PickupZone = nil
-                        break
-                    end
-                until not inRange
-            end)
-        end,
-        onExit = function()
-            lib.hideTextUI()
-            shownTextUI = false
-            inRange = false
-        end
-    })
+                    until not inRange
+                end)
+            end,
+            onExit = function()
+                lib.hideTextUI()
+                shownTextUI = false
+                inRange = false
+            end
+        })
+    else
+        QBCore.Functions.Notify(Lang:t('error.already_driving_bus'), 'error')
+    end
 end)

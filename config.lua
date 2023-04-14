@@ -1,5 +1,7 @@
 Config = Config or {}
 
+Config.Debug = false -- debug for lib zones
+
 Config.AllowedVehicles = {
     {model = `bus`}
 }
