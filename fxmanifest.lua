@@ -6,10 +6,8 @@ repository 'https://github.com/Qbox-project/qb-busjob'
 
 shared_scripts {
     'config.lua',
-    '@qb-core/shared/locale.lua',
-    'locales/en.lua',
-    'locales/*.lua',
-    '@ox_lib/init.lua'
+    'locales/*.json',
+    '@ox_lib/init.lua',
 }
 
 client_script 'client/main.lua'
