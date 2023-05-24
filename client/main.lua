@@ -1,6 +1,8 @@
+-- Locale lib
+lib.locale()
+
 -- Variables
 local QBCore = exports['qbx-core']:GetCoreObject()
-lib.locale()
 local PlayerData = QBCore.Functions.GetPlayerData()
 local route = 1
 local max = #Config.NPCLocations.Locations
@@ -41,7 +43,9 @@ end
 
 local function removeBusBlip()
     if not busBlip then return end
+    print(busBlip)
     RemoveBlip(busBlip)
+    print('blip removed')
     busBlip = nil
 end
 
@@ -61,18 +65,19 @@ local function updateBlip()
     if table.type(PlayerData) == 'empty' or (PlayerData.job.name ~= "bus" and busBlip) then
         removeBusBlip()
         return
+    elseif (PlayerData.job.name == "bus" and not busBlip) then
+        local coords = Config.Location
+        busBlip = AddBlipForCoord(coords.x, coords.y, coords.z)
+        SetBlipSprite(busBlip, 513)
+        SetBlipDisplay(busBlip, 4)
+        SetBlipScale(busBlip, 0.6)
+        SetBlipAsShortRange(busBlip, true)
+        SetBlipColour(busBlip, 49)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentSubstringPlayerName(locale('bus_depot'))
+        EndTextCommandSetBlipName(busBlip)
+        return
     end
-
-    local coords = Config.Location
-    busBlip = AddBlipForCoord(coords.x, coords.y, coords.z)
-    SetBlipSprite(busBlip, 513)
-    SetBlipDisplay(busBlip, 4)
-    SetBlipScale(busBlip, 0.6)
-    SetBlipAsShortRange(busBlip, true)
-    SetBlipColour(busBlip, 49)
-    BeginTextCommandSetBlipName("STRING")
-    AddTextComponentSubstringPlayerName(locale('bus_depot'))
-    EndTextCommandSetBlipName(busBlip)
 end
 
 local function isPlayerVehicleABus()
@@ -295,6 +300,11 @@ RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
     PlayerData = val
     updateBlip()
     updateZone()
+end)
+
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(val)
+    PlayerData.job = val
+    updateBlip()
 end)
 
 RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
