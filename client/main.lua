@@ -43,9 +43,7 @@ end
 
 local function removeBusBlip()
     if not busBlip then return end
-    print(busBlip)
     RemoveBlip(busBlip)
-    print('blip removed')
     busBlip = nil
 end
 
@@ -300,11 +298,6 @@ RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
     PlayerData = val
     updateBlip()
     updateZone()
-end)
-
-RegisterNetEvent('QBCore:Client:OnJobUpdate', function(val)
-    PlayerData.job = val
-    updateBlip()
 end)
 
 RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
