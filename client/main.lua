@@ -179,7 +179,6 @@ local function busGarage()
     lib.showContext('qb_busjob_open_garage_context_menu')
 end
 
-
 local function updateZone()
     if VehicleZone then
         VehicleZone:remove()
@@ -260,16 +259,30 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
         return
     end
 
-    QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
-        local veh = NetToVeh(netId)
-        SetVehicleNumberPlateText(veh, locale('bus_plate') .. tostring(math.random(1000, 9999)))
-        SetVehicleFuelLevel(veh, 100.0)
-        lib.hideContext()
-        TaskWarpPedIntoVehicle(cache.ped, veh, -1)
-        TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-        SetVehicleEngineOn(veh, true, true, false)
-    end, data.model, Config.Location, true)
-    Wait(1000)
+    local netId = lib.callback.await('qb-busjob:server:spawnBus', false, data.model)
+    Wait(300)
+    if not netId or netId == 0 or not NetworkDoesEntityExistWithNetworkId(netId) then
+        lib.notify({
+            title = locale('bus_job'),
+            description = locale('failed_to_spawn'),
+            type = 'error'
+        })
+        return
+    end
+
+    local veh = NetToVeh(netId)
+    if veh == 0 then
+        lib.notify({
+            title = locale('bus_job'),
+            description = locale('failed_to_spawn'),
+            type = 'error'
+        })
+        return
+    end
+
+    SetVehicleFuelLevel(veh, 100.0)
+    SetVehicleEngineOn(veh, true, true, false)
+    lib.hideContext()
     TriggerEvent('qb-busjob:client:DoBusNpc')
 end)
 
