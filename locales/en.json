@@ -13,5 +13,6 @@
     "bus_job_vehicles": "[E] - Job Vehicles",
     "bus_header": "Bus Vehicles",
     "bus_job": "Bus Job",
-    "exploit_attempt": "Exploit Attempt"
+    "exploit_attempt": "Exploit Attempt",
+    "failed_to_spawn": "Failed to spawn the bus"
 }
