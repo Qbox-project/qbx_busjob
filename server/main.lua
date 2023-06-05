@@ -13,6 +13,18 @@ local function isPlayerNearBus(src)
     return false
 end
 
+lib.callback.register('qb-busjob:server:spawnBus', function(source, model)
+    local netId = QBCore.Functions.CreateVehicle(source, model, Config.Location, true)
+    if not netId or netId == 0 then return end
+    local veh = NetworkGetEntityFromNetworkId(netId)
+    if not veh or veh == 0 then return end
+
+    local plate = locale('bus_plate') .. tostring(math.random(1000, 9999))
+    SetVehicleNumberPlateText(veh, plate)
+    TriggerClientEvent('vehiclekeys:client:SetOwner', source, plate)
+    return netId
+end)
+
 RegisterNetEvent('qb-busjob:server:NpcPay', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
