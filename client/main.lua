@@ -260,29 +260,20 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
     end
 
     local netId = lib.callback.await('qb-busjob:server:spawnBus', false, data.model)
-    Wait(300)
-    if not netId or netId == 0 or not NetworkDoesEntityExistWithNetworkId(netId) then
-        lib.notify({
-            title = locale('bus_job'),
-            description = locale('failed_to_spawn'),
-            type = 'error'
-        })
-        return
+    local timeout = 100
+    while not NetworkDoesEntityExistWithNetworkId(netId) and timeout > 0 do
+        Wait(10)
+        timeout -= 1
     end
-
     local veh = NetToVeh(netId)
-    if veh == 0 then
-        lib.notify({
-            title = locale('bus_job'),
-            description = locale('failed_to_spawn'),
-            type = 'error'
-        })
-        return
-    end
+    local plate = locale('bus_plate') .. tostring(math.random(1000, 9999))
 
+    SetVehicleNumberPlateText(veh, plate)
+    TriggerEvent('vehiclekeys:client:SetOwner', plate)
     SetVehicleFuelLevel(veh, 100.0)
     SetVehicleEngineOn(veh, true, true, false)
     lib.hideContext()
+    Wait(100)
     TriggerEvent('qb-busjob:client:DoBusNpc')
 end)
 
