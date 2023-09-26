@@ -2,8 +2,8 @@
 lib.locale()
 
 -- Variables
-local QBCore = exports['qbx-core']:GetCoreObject()
-local PlayerData = QBCore.Functions.GetPlayerData()
+
+local PlayerData = QBX.Functions.GetPlayerData()
 local route = 1
 local max = #Config.NPCLocations.Locations
 local busBlip = nil
@@ -185,7 +185,7 @@ local function updateZone()
         VehicleZone = nil
     end
 
-    if table.type(PlayerData) == 'empty' or PlayerData.job.name ~= 'bus' then return end
+    if table.type(PlayerData) == 'empty' or QBX.PlayerData.job.name ~= 'bus' then return end
 
     local inRange = false
     local shownTextUI = false
@@ -296,7 +296,7 @@ AddEventHandler('onResourceStart', function(resourceName)
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    PlayerData = QBCore.Functions.GetPlayerData()
+    PlayerData = QBX.Functions.GetPlayerData()
     updateBlip()
     updateZone()
 end)
