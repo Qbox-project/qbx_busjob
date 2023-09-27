@@ -301,13 +301,13 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
-    PlayerData = {}
+   
     updateBlip()
     updateZone()
 end)
 
 RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
-    PlayerData = val
+   
     updateBlip()
     updateZone()
 end)
