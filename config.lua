@@ -3,7 +3,7 @@ Config = Config or {}
 Config.Debug = false -- debug for lib zones
 
 Config.AllowedVehicles = {
-    {model = `bus`}
+    {model = `bus`}  --- You can change the vehicle for example, bus to Bati
 }
 
 Config.BonusChance = 36 -- Value from 1 to 100 (percentage)

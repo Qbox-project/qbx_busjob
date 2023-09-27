@@ -1,3 +1,2 @@
-# qb-busjob
-
-Bus Job
+# qbx-busjob
+Bus job
