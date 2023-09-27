@@ -1,2 +1,2 @@
-# qbx-busjob
+# qbx_busjob
 Bus job

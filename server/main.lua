@@ -13,7 +13,7 @@ local function isPlayerNearBus(src)
     return false
 end
 
-lib.callback.register('qb-busjob:server:spawnBus', function(source, model)
+lib.callback.register('qbx_busjob:server:spawnBus', function(source, model)
     local netId = SpawnVehicle(source, model, Config.Location, true)
     if not netId or netId == 0 then return end
     local veh = NetworkGetEntityFromNetworkId(netId)
@@ -25,7 +25,7 @@ lib.callback.register('qb-busjob:server:spawnBus', function(source, model)
     return netId
 end)
 
-RegisterNetEvent('qb-busjob:server:NpcPay', function()
+RegisterNetEvent('qbx_busjob:server:NpcPay', function()
     local src = source
     if not QBX.PlayerData then return end
     if QBX.PlayerData.job.name ~= "bus" or not isPlayerNearBus(src) then return DropPlayer(src, locale('exploit_attempt')) end

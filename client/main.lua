@@ -116,7 +116,7 @@ local function GetDeliveryLocation()
     local inRange = false
     local shownTextUI = false
     DeliverZone = lib.zones.sphere({
-        name = "qb_busjob_bus_deliver",
+        name = "qbx_busjob_bus_deliver",
         coords = vec3(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
         radius = 5,
         debug = Config.Debug,
@@ -144,7 +144,7 @@ local function GetDeliveryLocation()
                         removePed(NpcData.Npc)
                         resetNpcTask()
                         nextStop()
-                        TriggerEvent('qb-busjob:client:DoBusNpc')
+                        TriggerEvent('qbx_busjob:client:DoBusNpc')
                         lib.hideTextUI()
                         shownTextUI = false
                         DeliverZone:remove()
@@ -167,16 +167,16 @@ local function busGarage()
     for _, v in pairs(Config.AllowedVehicles) do
         vehicleMenu[#vehicleMenu + 1] = {
             title = locale('bus'),
-            event = "qb-busjob:client:TakeVehicle",
+            event = "qbx_busjob:client:TakeVehicle",
             args = v
         }
     end
     lib.registerContext({
-        id = 'qb_busjob_open_garage_context_menu',
+        id = 'qbx_busjob_open_garage_context_menu',
         title = locale('bus_header'),
         options = vehicleMenu
     })
-    lib.showContext('qb_busjob_open_garage_context_menu')
+    lib.showContext('qbx_busjob_open_garage_context_menu')
 end
 
 local function updateZone()
@@ -190,7 +190,7 @@ local function updateZone()
     local inRange = false
     local shownTextUI = false
     VehicleZone = lib.zones.sphere({
-        name = "qb_busjob_bus_main",
+        name = "qbx_busjob_bus_main",
         coords = Config.Location.xyz,
         radius = 5,
         debug = Config.Debug,
@@ -249,7 +249,7 @@ end
 
 -- onExit()
 
-RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
+RegisterNetEvent("qbx_busjob:client:TakeVehicle", function(data)
     if BusData.Active then
         lib.notify({
             title = locale('bus_job'),
@@ -259,7 +259,7 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
         return
     end
 
-    local netId = lib.callback.await('qb-busjob:server:spawnBus', false, data.model)
+    local netId = lib.callback.await('qbx_busjob:server:spawnBus', false, data.model)
     Wait(300)
     if not netId or netId == 0 or not NetworkDoesEntityExistWithNetworkId(netId) then
         lib.notify({
@@ -283,7 +283,7 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
     SetVehicleFuelLevel(veh, 100.0)
     SetVehicleEngineOn(veh, true, true, false)
     lib.hideContext()
-    TriggerEvent('qb-busjob:client:DoBusNpc')
+    TriggerEvent('qbx_busjob:client:DoBusNpc')
 end)
 
 -- Events
@@ -312,7 +312,7 @@ RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
     updateZone()
 end)
 
-RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
+RegisterNetEvent('qbx_busjob:client:DoBusNpc', function()
     if not isPlayerVehicleABus() then
         lib.notify({
             title = locale('bus_job'),
@@ -340,7 +340,7 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
         local inRange = false
         local shownTextUI = false
         PickupZone = lib.zones.sphere({
-            name = "qb_busjob_bus_pickup",
+            name = "qbx_busjob_bus_pickup",
             coords = vec3(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
             radius = 5,
             debug = Config.Debug,
@@ -377,7 +377,7 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
                             removeNPCBlip()
                             GetDeliveryLocation()
                             NpcData.NpcTaken = true
-                            TriggerServerEvent('qb-busjob:server:NpcPay')
+                            TriggerServerEvent('qbx_busjob:server:NpcPay')
                             lib.hideTextUI()
                             shownTextUI = false
                             PickupZone:remove()

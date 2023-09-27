@@ -2,11 +2,11 @@ fx_version 'cerulean'
 game 'gta5'
 
 version '1.0.0'
-repository 'https://github.com/Qbox-project/qb-busjob'
+repository 'https://github.com/Qbox-project/qbx_busjob'
 
 shared_scripts {
     'config.lua',
-    '@qbx-core/import.lua',
+    '@qbx_core/import.lua',
     '@ox_lib/init.lua'
 }
 
@@ -19,7 +19,7 @@ files {
 }
 
 dependencies {
-    'qb-core',
+    'qbx_core',
     'ox_lib'
 }
 
