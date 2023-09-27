@@ -3,7 +3,7 @@ lib.locale()
 
 -- Variables
 
-local PlayerData = exports.qbx_core:GetPlayerData()
+
 local route = 1
 local max = #Config.NPCLocations.Locations
 local busBlip = nil
@@ -60,7 +60,7 @@ local function removeNPCBlip()
 end
 
 local function updateBlip()
-    if table.type(PlayerData) == 'empty' or (QBX.PlayerData.job.name ~= "bus" and busBlip) then
+    if table.type(QBX.PlayerData) == 'empty' or (QBX.PlayerData.job.name ~= "bus" and busBlip) then
         removeBusBlip()
         return
     elseif (QBX.PlayerData.job.name == "bus" and not busBlip) then
@@ -185,7 +185,7 @@ local function updateZone()
         VehicleZone = nil
     end
 
-    if table.type(PlayerData) == 'empty' or QBX.PlayerData.job.name ~= 'bus' then return end
+    if table.type(QBX.PlayerData) == 'empty' or QBX.PlayerData.job.name ~= 'bus' then return end
 
     local inRange = false
     local shownTextUI = false

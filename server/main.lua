@@ -27,9 +27,8 @@ end)
 
 RegisterNetEvent('qb-busjob:server:NpcPay', function()
     local src = source
-    local Player = exports.qbx_core:GetPlayer(src)
-    if not Player then return end
-    if Player.PlayerData.job.name ~= "bus" or not isPlayerNearBus(src) then return DropPlayer(src, locale('exploit_attempt')) end
+    if not QBX.PlayerData then return end
+    if QBX.PlayerData.job.name ~= "bus" or not isPlayerNearBus(src) then return DropPlayer(src, locale('exploit_attempt')) end
 
     local payment = math.random(15, 25)
     if math.random(1, 100) < Config.BonusChance then
