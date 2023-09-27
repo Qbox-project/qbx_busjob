@@ -296,7 +296,6 @@ AddEventHandler('onResourceStart', function(resourceName)
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    PlayerData = exports.qbx_core:GetPlayerData()
     updateBlip()
     updateZone()
 end)
