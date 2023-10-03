@@ -6,7 +6,7 @@ repository 'https://github.com/Qbox-project/qb-busjob'
 
 shared_scripts {
     'config.lua',
-    '@qbx-core/import.lua',
+    '@qbx_core/import.lua',
     '@ox_lib/init.lua'
 }
 
@@ -19,13 +19,12 @@ files {
 }
 
 dependencies {
-    'qb-core',
+    'qbx_core',
     'ox_lib'
 }
 
 
 modules {
-    'qbx_core:core',
 	'qbx_core:playerdata',
 	'qbx_core:utils'
 }
