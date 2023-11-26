@@ -1,6 +1,3 @@
-
-lib.locale()
-
 local function isPlayerNearBus(src)
     local ped = GetPlayerPed(src)
     local coords = GetEntityCoords(ped)
@@ -19,7 +16,7 @@ lib.callback.register('qb-busjob:server:spawnBus', function(source, model)
     local veh = NetworkGetEntityFromNetworkId(netId)
     if not veh or veh == 0 then return end
 
-    local plate = locale('bus_plate') .. tostring(math.random(1000, 9999))
+    local plate = Lang:t('info.bus_plate') .. tostring(math.random(1000, 9999))
     SetVehicleNumberPlateText(veh, plate)
     TriggerClientEvent('vehiclekeys:client:SetOwner', source, plate)
     return netId
@@ -28,7 +25,7 @@ end)
 RegisterNetEvent('qb-busjob:server:NpcPay', function()
     local src = source
     if not QBX.PlayerData then return end
-    if QBX.PlayerData.job.name ~= "bus" or not isPlayerNearBus(src) then return DropPlayer(src, locale('exploit_attempt')) end
+    if QBX.PlayerData.job.name ~= "bus" or not isPlayerNearBus(src) then return DropPlayer(src, Lang:t('error.exploit_attempt')) end
 
     local payment = math.random(15, 25)
     if math.random(1, 100) < Config.BonusChance then

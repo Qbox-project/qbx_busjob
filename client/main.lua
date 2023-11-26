@@ -1,9 +1,3 @@
--- Locale lib
-lib.locale()
-
--- Variables
-
-
 local route = 1
 local max = #Config.NPCLocations.Locations
 local busBlip = nil
@@ -72,7 +66,7 @@ local function updateBlip()
         SetBlipAsShortRange(busBlip, true)
         SetBlipColour(busBlip, 49)
         BeginTextCommandSetBlipName("STRING")
-        AddTextComponentSubstringPlayerName(locale('bus_depot'))
+        AddTextComponentSubstringPlayerName(Lang:t('info.bus_depot'))
         EndTextCommandSetBlipName(busBlip)
         return
     end
@@ -123,7 +117,7 @@ local function GetDeliveryLocation()
         onEnter = function()
             inRange = true
             if not shownTextUI then
-                lib.showTextUI(locale('busstop_text'))
+                lib.showTextUI(Lang:t('info.busstop_text'))
                 shownTextUI = true
             end
             CreateThread(function()
@@ -136,8 +130,8 @@ local function GetDeliveryLocation()
                         local targetCoords = Config.NPCLocations.Locations[NpcData.LastNpc]
                         TaskGoStraightToCoord(NpcData.Npc, targetCoords.x, targetCoords.y, targetCoords.z, 1.0, -1, 0.0, 0.0)
                         lib.notify({
-                            title = locale('bus_job'),
-                            description = locale('dropped_off'),
+                            title = Lang:t('info.bus_job'),
+                            description = Lang:t('info.dropped_off'),
                             type = 'success'
                         })
                         removeNPCBlip()
@@ -166,14 +160,14 @@ local function busGarage()
     local vehicleMenu = {}
     for _, v in pairs(Config.AllowedVehicles) do
         vehicleMenu[#vehicleMenu + 1] = {
-            title = locale('bus'),
+            title = Lang:t('info.bus'),
             event = "qb-busjob:client:TakeVehicle",
             args = v
         }
     end
     lib.registerContext({
         id = 'qb_busjob_open_garage_context_menu',
-        title = locale('bus_header'),
+        title = Lang:t('info.bus_header'),
         options = vehicleMenu
     })
     lib.showContext('qb_busjob_open_garage_context_menu')
@@ -201,7 +195,7 @@ local function updateZone()
                     Wait(0)
                     if not isPlayerVehicleABus() then
                         if not shownTextUI then
-                            lib.showTextUI(locale('bus_job_vehicles'))
+                            lib.showTextUI(Lang:t('info.bus_job_vehicles'))
                             shownTextUI = true
                         end
                         if IsControlJustReleased(0, 38) then
@@ -212,7 +206,7 @@ local function updateZone()
                         end
                     else
                         if not shownTextUI then
-                            lib.showTextUI(locale('bus_stop_work'))
+                            lib.showTextUI(Lang:t('info.bus_stop_work'))
                             shownTextUI = true
                         end
                         if IsControlJustReleased(0, 38) then
@@ -228,8 +222,8 @@ local function updateZone()
                                 end
                             else
                                 lib.notify({
-                                    title = locale('bus_job'),
-                                    description = locale('drop_off_passengers'),
+                                    title = Lang:t('info.bus_job'),
+                                    description = Lang:t('error.drop_off_passengers'),
                                     type = 'error'
                                 })
                             end
@@ -252,8 +246,8 @@ end
 RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
     if BusData.Active then
         lib.notify({
-            title = locale('bus_job'),
-            description = locale('one_bus_active'),
+            title = Lang:t('info.bus_job'),
+            description = Lang:t('error.one_bus_active'),
             type = 'error'
         })
         return
@@ -263,8 +257,8 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
     Wait(300)
     if not netId or netId == 0 or not NetworkDoesEntityExistWithNetworkId(netId) then
         lib.notify({
-            title = locale('bus_job'),
-            description = locale('failed_to_spawn'),
+            title = Lang:t('info.bus_job'),
+            description = Lang:t('error.failed_to_spawn'),
             type = 'error'
         })
         return
@@ -273,8 +267,8 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
     local veh = NetToVeh(netId)
     if veh == 0 then
         lib.notify({
-            title = locale('bus_job'),
-            description = locale('failed_to_spawn'),
+            title = Lang:t('info.bus_job'),
+            description = Lang:t('error.failed_to_spawn'),
             type = 'error'
         })
         return
@@ -315,8 +309,8 @@ end)
 RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
     if not isPlayerVehicleABus() then
         lib.notify({
-            title = locale('bus_job'),
-            description = locale('not_in_bus'),
+            title = Lang:t('info.bus_job'),
+            description = Lang:t('error.not_in_bus'),
             type = 'error'
         })
         return
@@ -347,7 +341,7 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
             onEnter = function()
                 inRange = true
                 if not shownTextUI then
-                    lib.showTextUI(locale('busstop_text'))
+                    lib.showTextUI(Lang:t('info.busstop_text'))
                     shownTextUI = true
                 end
                 CreateThread(function()
@@ -370,8 +364,8 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
                             TaskEnterVehicle(NpcData.Npc, cache.vehicle, -1, freeSeat, 1.0, 0)
                             Wait(3000)
                             lib.notify({
-                                title = locale('bus_job'),
-                                description = locale('goto_busstop'),
+                                title = Lang:t('info.bus_job'),
+                                description = Lang:t('info.goto_busstop'),
                                 type = 'info'
                             })
                             removeNPCBlip()
@@ -395,8 +389,8 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
         })
     else
         lib.notify({
-            title = locale('bus_job'),
-            description = locale('already_driving_bus'),
+            title = Lang:t('info.bus_job'),
+            description = Lang:t('error.already_driving_bus'),
             type = 'info'
         })
     end
