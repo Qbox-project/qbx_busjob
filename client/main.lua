@@ -295,13 +295,13 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
-   
+
     updateBlip()
     updateZone()
 end)
 
-RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
-   
+RegisterNetEvent('QBCore:Player:SetPlayerData', function()
+
     updateBlip()
     updateZone()
 end)
