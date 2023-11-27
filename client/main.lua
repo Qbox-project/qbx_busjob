@@ -1,5 +1,7 @@
+local config = require 'config.client'
+local sharedConfig = require 'config.shared'
 local route = 1
-local max = #Config.NPCLocations.Locations
+local max = #sharedConfig.npcLocations.locations
 local busBlip = nil
 local VehicleZone
 local DeliverZone
@@ -58,7 +60,7 @@ local function updateBlip()
         removeBusBlip()
         return
     elseif (QBX.PlayerData.job.name == "bus" and not busBlip) then
-        local coords = Config.Location
+        local coords = sharedConfig.location
         busBlip = AddBlipForCoord(coords.x, coords.y, coords.z)
         SetBlipSprite(busBlip, 513)
         SetBlipDisplay(busBlip, 4)
@@ -76,8 +78,8 @@ local function isPlayerVehicleABus()
     if not cache.vehicle then return false end
     local veh = GetEntityModel(cache.vehicle)
 
-    for i = 1, #Config.AllowedVehicles, 1 do
-        if veh == Config.AllowedVehicles[i].model then
+    for i = 1, #config.allowedVehicles, 1 do
+        if veh == config.allowedVehicles[i].model then
             return true
         end
     end
@@ -102,7 +104,7 @@ end
 local function GetDeliveryLocation()
     nextStop()
     removeNPCBlip()
-    NpcData.DeliveryBlip = AddBlipForCoord(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z)
+    NpcData.DeliveryBlip = AddBlipForCoord(sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z)
     SetBlipColour(NpcData.DeliveryBlip, 3)
     SetBlipRoute(NpcData.DeliveryBlip, true)
     SetBlipRouteColour(NpcData.DeliveryBlip, 3)
@@ -111,9 +113,9 @@ local function GetDeliveryLocation()
     local shownTextUI = false
     DeliverZone = lib.zones.sphere({
         name = "qb_busjob_bus_deliver",
-        coords = vec3(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
+        coords = vec3(sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z),
         radius = 5,
-        debug = Config.Debug,
+        debug = config.debugPoly,
         onEnter = function()
             inRange = true
             if not shownTextUI then
@@ -127,7 +129,7 @@ local function GetDeliveryLocation()
                         TaskLeaveVehicle(NpcData.Npc, cache.vehicle, 0)
                         SetEntityAsMissionEntity(NpcData.Npc, false, true)
                         SetEntityAsNoLongerNeeded(NpcData.Npc)
-                        local targetCoords = Config.NPCLocations.Locations[NpcData.LastNpc]
+                        local targetCoords = sharedConfig.npcLocations.locations[NpcData.LastNpc]
                         TaskGoStraightToCoord(NpcData.Npc, targetCoords.x, targetCoords.y, targetCoords.z, 1.0, -1, 0.0, 0.0)
                         lib.notify({
                             title = Lang:t('info.bus_job'),
@@ -158,7 +160,7 @@ end
 
 local function busGarage()
     local vehicleMenu = {}
-    for _, v in pairs(Config.AllowedVehicles) do
+    for _, v in pairs(config.allowedVehicles) do
         vehicleMenu[#vehicleMenu + 1] = {
             title = Lang:t('info.bus'),
             event = "qb-busjob:client:TakeVehicle",
@@ -185,9 +187,9 @@ local function updateZone()
     local shownTextUI = false
     VehicleZone = lib.zones.sphere({
         name = "qb_busjob_bus_main",
-        coords = Config.Location.xyz,
+        coords = sharedConfig.location.xyz,
         radius = 5,
-        debug = Config.Debug,
+        debug = config.debugPoly,
         onEnter = function()
             inRange = true
             CreateThread(function()
@@ -317,15 +319,15 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
     end
 
     if not NpcData.Active then
-        local Gender = math.random(1, #Config.NpcSkins)
-        local PedSkin = math.random(1, #Config.NpcSkins[Gender])
-        local model = joaat(Config.NpcSkins[Gender][PedSkin])
+        local Gender = math.random(1, #config.npcSkins)
+        local PedSkin = math.random(1, #config.npcSkins[Gender])
+        local model = joaat(config.npcSkins[Gender][PedSkin])
         lib.requestModel(model)
-        NpcData.Npc = CreatePed(3, model, Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z - 0.98, Config.NPCLocations.Locations[route].w, false, true)
+        NpcData.Npc = CreatePed(3, model, sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z - 0.98, sharedConfig.npcLocations.locations[route].w, false, true)
         PlaceObjectOnGroundProperly(NpcData.Npc)
         FreezeEntityPosition(NpcData.Npc, true)
         removeNPCBlip()
-        NpcData.NpcBlip = AddBlipForCoord(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z)
+        NpcData.NpcBlip = AddBlipForCoord(sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z)
         SetBlipColour(NpcData.NpcBlip, 3)
         SetBlipRoute(NpcData.NpcBlip, true)
         SetBlipRouteColour(NpcData.NpcBlip, 3)
@@ -335,9 +337,9 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
         local shownTextUI = false
         PickupZone = lib.zones.sphere({
             name = "qb_busjob_bus_pickup",
-            coords = vec3(Config.NPCLocations.Locations[route].x, Config.NPCLocations.Locations[route].y, Config.NPCLocations.Locations[route].z),
+            coords = vec3(sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z),
             radius = 5,
-            debug = Config.Debug,
+            debug = config.debugPoly,
             onEnter = function()
                 inRange = true
                 if not shownTextUI then
