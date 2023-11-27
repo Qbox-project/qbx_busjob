@@ -1,5 +1,5 @@
 return {
-    debugPoly = true,
+    debugPoly = false,
     allowedVehicles = {
         {
             model = `bus`
