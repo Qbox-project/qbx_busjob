@@ -1,0 +1,22 @@
+{
+    "error": {
+        "already_driving_bus": "Již řídíte autobus",
+        "not_in_bus": "Nejste v autobuse",
+        "one_bus_active": "Můžete mít pouze jeden aktivní autobus najednou",
+        "drop_off_passengers": "Vysaďte cestující před tím, než přestanete pracovat",
+        "exploit_attempt": "Pokus o zneužití",
+        "failed_to_spawn": "Nepodařilo se vytvořit autobus"
+    },
+    "info": {
+        "dropped_off": "Osoba byla vysazena",
+        "bus": "Standardní autobus",
+        "goto_busstop": "Jděte na autobusovou zastávku",
+        "busstop_text": "[E] - Autobusová zastávka",
+        "bus_plate": "AUT",
+        "bus_depot": "Autobusový depo",
+        "bus_stop_work": "[E] - Přestat pracovat",
+        "bus_job_vehicles": "[E] - Pracovní vozidla",
+        "bus_header": "Autobusová vozidla",
+        "bus_job": "Práce s autobusem"
+    }
+}

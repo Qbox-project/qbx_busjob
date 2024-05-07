@@ -3,9 +3,9 @@ local sharedConfig = require 'config.shared'
 local route = 1
 local max = #sharedConfig.npcLocations.locations
 local busBlip = nil
-local VehicleZone
-local DeliverZone
-local PickupZone
+local vehicleZone
+local deliverZone
+local pickupZone
 
 local NpcData = {
     Active = false,
@@ -68,7 +68,7 @@ local function updateBlip()
         SetBlipAsShortRange(busBlip, true)
         SetBlipColour(busBlip, 49)
         BeginTextCommandSetBlipName("STRING")
-        AddTextComponentSubstringPlayerName(Lang:t('info.bus_depot'))
+        AddTextComponentSubstringPlayerName(locale('info.bus_depot'))
         EndTextCommandSetBlipName(busBlip)
         return
     end
@@ -101,7 +101,7 @@ local function removePed(ped)
     end)
 end
 
-local function GetDeliveryLocation()
+local function getDeliveryLocation()
     nextStop()
     removeNPCBlip()
     NpcData.DeliveryBlip = AddBlipForCoord(sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z)
@@ -111,15 +111,15 @@ local function GetDeliveryLocation()
     NpcData.LastDeliver = route
     local inRange = false
     local shownTextUI = false
-    DeliverZone = lib.zones.sphere({
-        name = "qb_busjob_bus_deliver",
+    deliverZone = lib.zones.sphere({
+        name = "qbx_busjob_bus_deliver",
         coords = vec3(sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z),
         radius = 5,
         debug = config.debugPoly,
         onEnter = function()
             inRange = true
             if not shownTextUI then
-                lib.showTextUI(Lang:t('info.busstop_text'))
+                lib.showTextUI(locale('info.busstop_text'))
                 shownTextUI = true
             end
             CreateThread(function()
@@ -132,19 +132,19 @@ local function GetDeliveryLocation()
                         local targetCoords = sharedConfig.npcLocations.locations[NpcData.LastNpc]
                         TaskGoStraightToCoord(NpcData.Npc, targetCoords.x, targetCoords.y, targetCoords.z, 1.0, -1, 0.0, 0.0)
                         lib.notify({
-                            title = Lang:t('info.bus_job'),
-                            description = Lang:t('info.dropped_off'),
+                            title = locale('info.bus_job'),
+                            description = locale('info.dropped_off'),
                             type = 'success'
                         })
                         removeNPCBlip()
                         removePed(NpcData.Npc)
                         resetNpcTask()
                         nextStop()
-                        TriggerEvent('qb-busjob:client:DoBusNpc')
+                        TriggerEvent('qbx_busjob:client:DoBusNpc')
                         lib.hideTextUI()
                         shownTextUI = false
-                        DeliverZone:remove()
-                        DeliverZone = nil
+                        deliverZone:remove()
+                        deliverZone = nil
                         break
                     end
                 until not inRange
@@ -162,31 +162,31 @@ local function busGarage()
     local vehicleMenu = {}
     for _, v in pairs(config.allowedVehicles) do
         vehicleMenu[#vehicleMenu + 1] = {
-            title = Lang:t('info.bus'),
-            event = "qb-busjob:client:TakeVehicle",
+            title = locale('info.bus'),
+            event = "qbx_busjob:client:TakeVehicle",
             args = v
         }
     end
     lib.registerContext({
-        id = 'qb_busjob_open_garage_context_menu',
-        title = Lang:t('info.bus_header'),
+        id = 'qbx_busjob_open_garage_context_menu',
+        title = locale('info.bus_header'),
         options = vehicleMenu
     })
-    lib.showContext('qb_busjob_open_garage_context_menu')
+    lib.showContext('qbx_busjob_open_garage_context_menu')
 end
 
 local function updateZone()
-    if VehicleZone then
-        VehicleZone:remove()
-        VehicleZone = nil
+    if vehicleZone then
+        vehicleZone:remove()
+        vehicleZone = nil
     end
 
     if table.type(QBX.PlayerData) == 'empty' or QBX.PlayerData.job.name ~= 'bus' then return end
 
     local inRange = false
     local shownTextUI = false
-    VehicleZone = lib.zones.sphere({
-        name = "qb_busjob_bus_main",
+    vehicleZone = lib.zones.sphere({
+        name = "qbx_busjob_bus_main",
         coords = sharedConfig.location.xyz,
         radius = 5,
         debug = config.debugPoly,
@@ -197,7 +197,7 @@ local function updateZone()
                     Wait(0)
                     if not isPlayerVehicleABus() then
                         if not shownTextUI then
-                            lib.showTextUI(Lang:t('info.bus_job_vehicles'))
+                            lib.showTextUI(locale('info.bus_job_vehicles'))
                             shownTextUI = true
                         end
                         if IsControlJustReleased(0, 38) then
@@ -208,7 +208,7 @@ local function updateZone()
                         end
                     else
                         if not shownTextUI then
-                            lib.showTextUI(Lang:t('info.bus_stop_work'))
+                            lib.showTextUI(locale('info.bus_stop_work'))
                             shownTextUI = true
                         end
                         if IsControlJustReleased(0, 38) then
@@ -224,8 +224,8 @@ local function updateZone()
                                 end
                             else
                                 lib.notify({
-                                    title = Lang:t('info.bus_job'),
-                                    description = Lang:t('error.drop_off_passengers'),
+                                    title = locale('info.bus_job'),
+                                    description = locale('error.drop_off_passengers'),
                                     type = 'error'
                                 })
                             end
@@ -245,22 +245,22 @@ end
 
 -- onExit()
 
-RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
+RegisterNetEvent("qbx_busjob:client:TakeVehicle", function(data)
     if BusData.Active then
         lib.notify({
-            title = Lang:t('info.bus_job'),
-            description = Lang:t('error.one_bus_active'),
+            title = locale('info.bus_job'),
+            description = locale('error.one_bus_active'),
             type = 'error'
         })
         return
     end
 
-    local netId = lib.callback.await('qb-busjob:server:spawnBus', false, data.model)
+    local netId = lib.callback.await('qbx_busjob:server:spawnBus', false, data.model)
     Wait(300)
     if not netId or netId == 0 or not NetworkDoesEntityExistWithNetworkId(netId) then
         lib.notify({
-            title = Lang:t('info.bus_job'),
-            description = Lang:t('error.failed_to_spawn'),
+            title = locale('info.bus_job'),
+            description = locale('error.failed_to_spawn'),
             type = 'error'
         })
         return
@@ -269,8 +269,8 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
     local veh = NetToVeh(netId)
     if veh == 0 then
         lib.notify({
-            title = Lang:t('info.bus_job'),
-            description = Lang:t('error.failed_to_spawn'),
+            title = locale('info.bus_job'),
+            description = locale('error.failed_to_spawn'),
             type = 'error'
         })
         return
@@ -279,7 +279,7 @@ RegisterNetEvent("qb-busjob:client:TakeVehicle", function(data)
     SetVehicleFuelLevel(veh, 100.0)
     SetVehicleEngineOn(veh, true, true, false)
     lib.hideContext()
-    TriggerEvent('qb-busjob:client:DoBusNpc')
+    TriggerEvent('qbx_busjob:client:DoBusNpc')
 end)
 
 -- Events
@@ -308,11 +308,11 @@ RegisterNetEvent('QBCore:Player:SetPlayerData', function()
     updateZone()
 end)
 
-RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
+RegisterNetEvent('qbx_busjob:client:DoBusNpc', function()
     if not isPlayerVehicleABus() then
         lib.notify({
-            title = Lang:t('info.bus_job'),
-            description = Lang:t('error.not_in_bus'),
+            title = locale('info.bus_job'),
+            description = locale('error.not_in_bus'),
             type = 'error'
         })
         return
@@ -335,15 +335,15 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
         NpcData.Active = true
         local inRange = false
         local shownTextUI = false
-        PickupZone = lib.zones.sphere({
-            name = "qb_busjob_bus_pickup",
+        pickupZone = lib.zones.sphere({
+            name = "qbx_busjob_bus_pickup",
             coords = vec3(sharedConfig.npcLocations.locations[route].x, sharedConfig.npcLocations.locations[route].y, sharedConfig.npcLocations.locations[route].z),
             radius = 5,
             debug = config.debugPoly,
             onEnter = function()
                 inRange = true
                 if not shownTextUI then
-                    lib.showTextUI(Lang:t('info.busstop_text'))
+                    lib.showTextUI(locale('info.busstop_text'))
                     shownTextUI = true
                 end
                 CreateThread(function()
@@ -366,18 +366,18 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
                             TaskEnterVehicle(NpcData.Npc, cache.vehicle, -1, freeSeat, 1.0, 0)
                             Wait(3000)
                             lib.notify({
-                                title = Lang:t('info.bus_job'),
-                                description = Lang:t('info.goto_busstop'),
+                                title = locale('info.bus_job'),
+                                description = locale('info.goto_busstop'),
                                 type = 'info'
                             })
                             removeNPCBlip()
-                            GetDeliveryLocation()
+                            getDeliveryLocation()
                             NpcData.NpcTaken = true
-                            TriggerServerEvent('qb-busjob:server:NpcPay')
+                            TriggerServerEvent('qbx_busjob:server:NpcPay')
                             lib.hideTextUI()
                             shownTextUI = false
-                            PickupZone:remove()
-                            PickupZone = nil
+                            pickupZone:remove()
+                            pickupZone = nil
                             break
                         end
                     until not inRange
@@ -391,8 +391,8 @@ RegisterNetEvent('qb-busjob:client:DoBusNpc', function()
         })
     else
         lib.notify({
-            title = Lang:t('info.bus_job'),
-            description = Lang:t('error.already_driving_bus'),
+            title = locale('info.bus_job'),
+            description = locale('error.already_driving_bus'),
             type = 'info'
         })
     end

@@ -5,12 +5,11 @@ description 'QBX_BusJob'
 repository 'https://github.com/Qbox-project/qbx_busjob'
 version '1.0.0'
 
+ox_lib 'locale'
+
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx_core/modules/utils.lua',
-    '@qbx_core/shared/locale.lua',
-    'locales/en.lua',
-    'locales/*.lua',
+    '@qbx_core/modules/lib.lua'
 }
 
 client_scripts {
@@ -21,6 +20,7 @@ client_scripts {
 server_script 'server/main.lua'
 
 files {
+    'locales/*.json',
     'config/client.lua',
     'config/shared.lua'
 }
