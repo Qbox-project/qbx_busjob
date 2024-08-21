@@ -1,0 +1,22 @@
+{
+    "error": {
+        "already_driving_bus": "Du fährst bereits einen Bus",
+        "not_in_bus": "Du bist nicht in einem Bus",
+        "one_bus_active": "Du kannst nur einen aktiven Bus zurzeit haben",
+        "drop_off_passengers": "Lass die Passagiere aussteigen, bevor du aufhörst zu arbeiten",
+        "exploit_attempt": "Ausnutzungsversuch",
+        "failed_to_spawn": "Der Bus konnte nicht gespawnt werden"
+    },
+    "info": {
+        "dropped_off": "Person wurde abgesetzt",
+        "bus": "Standardbus",
+        "goto_busstop": "Gehe zur Bushaltestelle",
+        "busstop_text": "[E] - Bushaltestelle",
+        "bus_plate": "BUS",
+        "bus_depot": "Busdepot",
+        "bus_stop_work": "[E] - Arbeit beenden",
+        "bus_job_vehicles": "[E] - Einsatzfahrzeuge",
+        "bus_header": "Busfahrzeuge",
+        "bus_job": "Busjob"
+    }
+}
