@@ -1,0 +1,22 @@
+{
+  "error": {
+    "already_driving_bus": "Zaten bir otobüs sürüyorsun",
+    "not_in_bus": "Otobüste değilsin",
+    "one_bus_active": "Aynı anda yalnızca bir aktif otobüs olabilir",
+    "drop_off_passengers": "Çalışmayı durdurmadan önce yolcuları indir",
+    "exploit_attempt": "Kötüye kullanım girişimi",
+    "failed_to_spawn": "Otobüs oluşturulamadı"
+  },
+  "info": {
+    "dropped_off": "Kişi indirildi",
+    "bus": "Standart Otobüs",
+    "goto_busstop": "Otobüs durağına git",
+    "busstop_text": "[E] - Otobüs Durağı",
+    "bus_plate": "OTOBÜS",
+    "bus_depot": "Otobüs Deposu",
+    "bus_stop_work": "[E] - Çalışmayı Durdur",
+    "bus_job_vehicles": "[E] - İş Araçları",
+    "bus_header": "Otobüs Araçları",
+    "bus_job": "Otobüs Görevi"
+  }
+}
