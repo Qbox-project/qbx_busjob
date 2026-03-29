@@ -1,0 +1,22 @@
+{
+    "error": {
+        "already_driving_bus": "Vous conduisez déjà un bus",
+        "not_in_bus": "Vous n'êtes pas dans un bus",
+        "one_bus_active": "Vous ne pouvez avoir qu'un seul bus actif à la fois",
+        "drop_off_passengers": "Déposez les passagers avant d'arrêter de travailler",
+        "exploit_attempt": "Tentative d'exploit",
+        "failed_to_spawn": "Échec de l'apparition du bus"
+    },
+    "info": {
+        "dropped_off": "La personne a été déposée",
+        "bus": "Bus Standard",
+        "goto_busstop": "Allez à l'arrêt de bus",
+        "busstop_text": "[E] - Arrêt de Bus",
+        "bus_plate": "BUS",
+        "bus_depot": "Dépôt de Bus",
+        "bus_stop_work": "[E] - Arrêter de Travailler",
+        "bus_job_vehicles": "[E] - Véhicules de Travail",
+        "bus_header": "Véhicules de Bus",
+        "bus_job": "Métier de Chauffeur de Bus"
+    }
+}
