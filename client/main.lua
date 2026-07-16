@@ -278,6 +278,8 @@ RegisterNetEvent("qbx_busjob:client:TakeVehicle", function(data)
 
     SetVehicleFuelLevel(veh, 100.0)
     SetVehicleEngineOn(veh, true, true, false)
+    BusData.Active = true
+    route = 1
     lib.hideContext()
     TriggerEvent('qbx_busjob:client:DoBusNpc')
 end)
