@@ -47,6 +47,7 @@ lib.callback.register('qbx_busjob:server:spawnBus', function(source, model)
 
     activeBuses[source] = {
         entity = veh,
+        spawned = true,
         routeIndex = 1,
         nextPayment = 0
     }
@@ -91,7 +92,7 @@ end)
 
 AddEventHandler('playerDropped', function()
     local bus = activeBuses[source]
-    if bus and DoesEntityExist(bus.entity) then DeleteEntity(bus.entity) end
+    if bus and bus.spawned and DoesEntityExist(bus.entity) then DeleteEntity(bus.entity) end
     activeBuses[source] = nil
     busesSpawning[source] = nil
 end)
@@ -100,6 +101,6 @@ AddEventHandler('onResourceStop', function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
 
     for _, bus in pairs(activeBuses) do
-        if DoesEntityExist(bus.entity) then DeleteEntity(bus.entity) end
+        if bus.spawned and DoesEntityExist(bus.entity) then DeleteEntity(bus.entity) end
     end
 end)
